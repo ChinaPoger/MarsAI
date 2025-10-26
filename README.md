@@ -102,14 +102,6 @@ asr:
 - `XFYUN_ACCESS_KEY_ID`: 讯飞语音识别 Access Key ID
 - `XFYUN_ACCESS_KEY_SECRET`: 讯飞语音识别 Access Key Secret
 
-### 前端配置 (marsAI-front/src/main/resources/config.properties)
-
-```properties
-# API 配置
-ai.api.key=YOUR_AI_API_KEY
-ai.api.url=YOUR_AI_API_URL
-```
-
 ## 项目启动方式
 
 ### 环境要求
