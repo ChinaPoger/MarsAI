@@ -63,18 +63,18 @@ langchain4j:
     dashscope:
       chat-model:
         model-name: qwen-max
-        api-key: ${DASHSCOPE_API_KEY:sk-364aaac41e084a868ed16c41e9473e42}
+        api-key: ${DASHSCOPE_API_KEY:YOUR_API_KEY_HERE}
 
 # AI 配置
 ai:
-  api-key: ${DASHSCOPE_API_KEY:sk-364aaac41e084a868ed16c41e9473e42}
+  api-key: ${DASHSCOPE_API_KEY:YOUR_API_KEY_HERE}
   api-url: ${AI_API_URL:https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions}
 
 # 高德地图配置
 amap:
-  maps-api-key: ${AMAP_MAPS_API_KEY:9561f121929a1b9d992150ad8746f16b}
-  web-api-key: ${AMAP_WEB_API_KEY:7ce7be0fbc824997793aaf5c6f6005dc}
-  security-js-code: ${AMAP_SECURITY_JS_CODE:d32844a5ef2ed1dce96e7d683a17fe49}
+  maps-api-key: ${AMAP_MAPS_API_KEY:YOUR_AMAP_MAPS_API_KEY}
+  web-api-key: ${AMAP_WEB_API_KEY:YOUR_AMAP_WEB_API_KEY}
+  security-js-code: ${AMAP_SECURITY_JS_CODE:YOUR_AMAP_SECURITY_JS_CODE}
 
 # MCP 配置
 mcp:
@@ -84,9 +84,9 @@ mcp:
 # 讯飞语音识别配置
 asr:
   xfyun:
-    app-id: ${XFYUN_APP_ID:4aeb1706}
-    access-key-id: ${XFYUN_ACCESS_KEY_ID:2c63c56fc9dee8f89ea98f5fa23f57c5}
-    access-key-secret: ${XFYUN_ACCESS_KEY_SECRET:ZjA2MDNkOWU1ZTEwNzgxOGE5NDZkNTMz}
+    app-id: ${XFYUN_APP_ID:YOUR_XFYUN_APP_ID}
+    access-key-id: ${XFYUN_ACCESS_KEY_ID:YOUR_XFYUN_ACCESS_KEY_ID}
+    access-key-secret: ${XFYUN_ACCESS_KEY_SECRET:YOUR_XFYUN_ACCESS_KEY_SECRET}
 ```
 
 #### 环境变量配置（可选）
