@@ -174,13 +174,9 @@ java -jar target/classes
 - **语音识别**：讯飞 ASR
 - **协议**：MCP (Model Context Protocol)
 
-## 演示视频链接
+## 演示视频
 
-[待补充演示视频链接]
-
-## 许可证
-
-[待补充许可证信息]
+🎥 观看演示视频：http://t4qpqle3i.hd-bkt.clouddn.com/video.mp4
 
 ## 贡献
 
