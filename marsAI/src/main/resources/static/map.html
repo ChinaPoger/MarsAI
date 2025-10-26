@@ -297,30 +297,48 @@
 
     <!-- 高德地图安全密钥配置 -->
     <script type="text/javascript">
-      // 从URL参数获取配置密钥，如果没有则使用默认值
-      const urlParams = new URLSearchParams(window.location.search);
-      const amapKey = urlParams.get('amapKey') || '7ce7be0fbc824997793aaf5c6f6005dc';
-      const amapSecurityCode = urlParams.get('amapSecurity') || 'd32844a5ef2ed1dce96e7d683a17fe49';
+      // 从服务器API获取配置密钥
+      let amapKey = '7ce7be0fbc824997793aaf5c6f6005dc'; // 默认值
+      let amapSecurityCode = 'd32844a5ef2ed1dce96e7d683a17fe49'; // 默认值
       
-      window._AMapSecurityConfig = {
-        securityJsCode: amapSecurityCode,
-      };
+      // 异步获取配置
+      fetch('/api/map-config')
+        .then(response => response.json())
+        .then(config => {
+          amapKey = config.webApiKey || amapKey;
+          amapSecurityCode = config.securityJsCode || amapSecurityCode;
+          
+          // 设置安全配置
+          window._AMapSecurityConfig = {
+            securityJsCode: amapSecurityCode,
+          };
+          
+          // 动态加载地图API
+          const script = document.createElement('script');
+          script.src = 'https://webapi.amap.com/maps?v=2.0&key=' + amapKey + '&plugin=AMap.Driving,AMap.Walking,AMap.Riding,AMap.Geocoder,AMap.Weather';
+          script.onload = function() {
+            initMap(); // 地图API加载完成后初始化地图
+          };
+          document.head.appendChild(script);
+        })
+        .catch(error => {
+          console.error('获取地图配置失败，使用默认配置:', error);
+          // 使用默认配置
+          window._AMapSecurityConfig = {
+            securityJsCode: amapSecurityCode,
+          };
+          const script = document.createElement('script');
+          script.src = 'https://webapi.amap.com/maps?v=2.0&key=' + amapKey + '&plugin=AMap.Driving,AMap.Walking,AMap.Riding,AMap.Geocoder,AMap.Weather';
+          script.onload = function() {
+            initMap();
+          };
+          document.head.appendChild(script);
+        });
     </script>
     
-    <!-- 高德地图JavaScript API -->
-    <script
-      type="text/javascript"
-      id="amap-script"
-    ></script>
     <script type="text/javascript">
-        
-        // 动态加载地图API
-        (function() {
-            const script = document.getElementById('amap-script');
-            script.src = 'https://webapi.amap.com/maps?v=2.0&key=' + amapKey + '&plugin=AMap.Driving,AMap.Walking,AMap.Riding,AMap.Geocoder,AMap.Weather';
-        })();
-        
         // 从URL参数获取数据
+        const urlParams = new URLSearchParams(window.location.search);
         const startLng = parseFloat(urlParams.get('startLng'));
         const startLat = parseFloat(urlParams.get('startLat'));
         const endLng = parseFloat(urlParams.get('endLng'));

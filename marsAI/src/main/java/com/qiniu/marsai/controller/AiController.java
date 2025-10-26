@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +28,12 @@ public class AiController {
 
     @Resource
     private AsrService asrService;
+
+    @Value("${amap.web-api-key:7ce7be0fbc824997793aaf5c6f6005dc}")
+    private String amapWebApiKey;
+
+    @Value("${amap.security-js-code:d32844a5ef2ed1dce96e7d683a17fe49}")
+    private String amapSecurityJsCode;
 
     @CrossOrigin
     @RequestMapping(value = "/aiWithText", produces = "application/json;charset=UTF-8")
@@ -67,6 +74,13 @@ public class AiController {
         return JSONObject.fromObject(returnJson).toString();
     }
 
-
+    @CrossOrigin
+    @GetMapping("/map-config")
+    public Map<String, String> getMapConfig() {
+        Map<String, String> config = new HashMap<>();
+        config.put("webApiKey", amapWebApiKey);
+        config.put("securityJsCode", amapSecurityJsCode);
+        return config;
+    }
 
 }
