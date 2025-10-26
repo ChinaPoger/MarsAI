@@ -2,6 +2,10 @@
 
 一个基于大模型和 MCP（Model Context Protocol）联动的智能线路规划系统，支持文本和语音输入，提供精准的线路规划与网页展示功能。
 
+## 📹 演示视频
+
+🎥 观看演示视频：http://t4qpqle3i.hd-bkt.clouddn.com/video.mp4
+
 ## 核心功能
 
 使用大模型跟 MCP 的联动，完成对文本线路规划输入跟语音线路规划输入需求的精准识别，最终打开网页展示线路。
@@ -173,10 +177,6 @@ java -jar target/classes
 - **地图服务**：高德地图 API
 - **语音识别**：讯飞 ASR
 - **协议**：MCP (Model Context Protocol)
-
-## 演示视频
-
-🎥 观看演示视频：http://t4qpqle3i.hd-bkt.clouddn.com/video.mp4
 
 ## 贡献
 
