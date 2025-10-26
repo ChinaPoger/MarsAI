@@ -13,13 +13,13 @@ import java.io.IOException;
 @Slf4j
 public class AsrService {
 
-    @Value("${asr.xfyun.app-id:4aeb1706}")
+    @Value("${asr.xfyun.app-id}")
     private String appId;
 
-    @Value("${asr.xfyun.access-key-id:2c63c56fc9dee8f89ea98f5fa23f57c5}")
+    @Value("${asr.xfyun.access-key-id}")
     private String accessKeyId;
 
-    @Value("${asr.xfyun.access-key-secret:ZjA2MDNkOWU1ZTEwNzgxOGE5NDZkNTMz}")
+    @Value("${asr.xfyun.access-key-secret}")
     private String accessKeySecret;
 
     public String transferAudio(MultipartFile audioFile) {

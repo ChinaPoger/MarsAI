@@ -29,10 +29,10 @@ public class AiController {
     @Resource
     private AsrService asrService;
 
-    @Value("${amap.web-api-key:7ce7be0fbc824997793aaf5c6f6005dc}")
+    @Value("${amap.web-api-key}")
     private String amapWebApiKey;
 
-    @Value("${amap.security-js-code:d32844a5ef2ed1dce96e7d683a17fe49}")
+    @Value("${amap.security-js-code}")
     private String amapSecurityJsCode;
 
     @CrossOrigin

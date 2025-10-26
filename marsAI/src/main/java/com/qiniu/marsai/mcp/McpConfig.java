@@ -16,7 +16,7 @@ import java.util.Map;
 @Configuration
 public class McpConfig {
 
-    @Value("${amap.maps-api-key:9561f121929a1b9d992150ad8746f16b}")
+    @Value("${amap.maps-api-key}")
     private String amapMapsApiKey;
 
     @Value("${mcp.gaode.enabled:true}")
