@@ -76,16 +76,10 @@ amap:
   web-api-key: ${AMAP_WEB_API_KEY:7ce7be0fbc824997793aaf5c6f6005dc}
   security-js-code: ${AMAP_SECURITY_JS_CODE:d32844a5ef2ed1dce96e7d683a17fe49}
 
-# 百度地图配置
-baidu-map:
-  ak: ${BAIDU_MAP_API_KEY:M2bHjBtPzNYIPLipc28ZRK1TZObg7k3U}
-
 # MCP 配置
 mcp:
   gaode:
     enabled: ${MCP_GAODE_ENABLED:true}
-  baidu:
-    enabled: ${MCP_BAIDU_ENABLED:false}
 
 # 讯飞语音识别配置
 asr:
@@ -103,9 +97,7 @@ asr:
 - `AMAP_MAPS_API_KEY`: 高德地图 MCP 密钥
 - `AMAP_WEB_API_KEY`: 高德地图 Web API 密钥
 - `AMAP_SECURITY_JS_CODE`: 高德地图安全密钥
-- `BAIDU_MAP_API_KEY`: 百度地图 API 密钥
 - `MCP_GAODE_ENABLED`: 是否启用高德地图 MCP（默认：true）
-- `MCP_BAIDU_ENABLED`: 是否启用百度地图 MCP（默认：false）
 - `XFYUN_APP_ID`: 讯飞语音识别 App ID
 - `XFYUN_ACCESS_KEY_ID`: 讯飞语音识别 Access Key ID
 - `XFYUN_ACCESS_KEY_SECRET`: 讯飞语音识别 Access Key Secret
@@ -116,9 +108,6 @@ asr:
 # API 配置
 ai.api.key=YOUR_AI_API_KEY
 ai.api.url=YOUR_AI_API_URL
-
-# 百度地图配置
-baidu.map.ak=YOUR_BAIDU_MAP_AK
 ```
 
 ## 项目启动方式
@@ -185,7 +174,7 @@ java -jar target/classes
 - **后端**：Spring Boot, Maven
 - **前端**：Java, JavaFX（地图展示）
 - **AI 服务**：大模型 API
-- **地图服务**：百度地图 API
+- **地图服务**：高德地图 API
 - **语音识别**：讯飞 ASR
 - **协议**：MCP (Model Context Protocol)
 

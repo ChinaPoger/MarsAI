@@ -19,14 +19,8 @@ public class McpConfig {
     @Value("${amap.maps-api-key:9561f121929a1b9d992150ad8746f16b}")
     private String amapMapsApiKey;
 
-    @Value("${baidu-map.ak:M2bHjBtPzNYIPLipc28ZRK1TZObg7k3U}")
-    private String baiduMapApiKey;
-
     @Value("${mcp.gaode.enabled:true}")
     private boolean gaodeEnabled;
-
-    @Value("${mcp.baidu.enabled:false}")
-    private boolean baiduEnabled;
 
     @Bean
     public McpToolProvider mcpToolProvider() {
@@ -48,23 +42,6 @@ public class McpConfig {
 
                 clients.add(mcpClientForGaode);
                 System.out.println("高德地图MCP客户端创建成功");
-            }
-
-            // 百度地图MCP
-            if (baiduEnabled) {
-                McpTransport transportForBaidu = new StdioMcpTransport.Builder()
-                        .command(List.of("cmd","/c", "npx","-y", "@baidumap/mcp-server-baidu-map"))
-                        .environment(Map.of("BAIDU_MAP_API_KEY", baiduMapApiKey))
-                        .logEvents(true)
-                        .build();
-
-                McpClient mcpClientForBaidu = new DefaultMcpClient.Builder()
-                        .key(baiduMapApiKey)
-                        .transport(transportForBaidu)
-                        .build();
-
-                clients.add(mcpClientForBaidu);
-                System.out.println("百度地图MCP客户端创建成功");
             }
 
             McpToolProvider toolProvider = McpToolProvider.builder()

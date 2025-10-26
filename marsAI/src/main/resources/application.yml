@@ -23,19 +23,13 @@ ai:
 # 高德地图配置
 amap:
   maps-api-key: ${AMAP_MAPS_API_KEY:9561f121929a1b9d992150ad8746f16b}
-  web-api-key: ${AMAP_WEB_API_KEY:7ce7be0fbc824997793aassssf5c6f6005dc}
-  security-js-code: ${AMAP_SECURITY_JS_CODE:d32844a5ef2ed1dce96111e7d683a17fe49}
-
-# 百度地图配置
-baidu-map:
-  ak: ${BAIDU_MAP_API_KEY:M2bHjBtPzNYIPLipc28ZRK1TZObg7k3U}
+  web-api-key: ${AMAP_WEB_API_KEY:7ce7be0fbc824997793aaf5c6f6005dc}
+  security-js-code: ${AMAP_SECURITY_JS_CODE:d32844a5ef2ed1dce96e7d683a17fe491}
 
 # MCP 配置
 mcp:
   gaode:
     enabled: ${MCP_GAODE_ENABLED:true}
-  baidu:
-    enabled: ${MCP_BAIDU_ENABLED:false}
 
 # 讯飞语音识别配置
 asr:
