@@ -2,6 +2,7 @@ package com.qiniu.marsai.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,11 +13,14 @@ import java.io.IOException;
 @Slf4j
 public class AsrService {
 
+    @Value("${asr.xfyun.app-id:4aeb1706}")
+    private String appId;
 
-    private static final String XFYUN_APPID = "4aeb1706";
-    private static final String XFYUN_ACCESS_KEY_SECRET = "ZjA2MDNkOWU1ZTEwNzgxOGE5NDZkNTMz";
-    private static final String XFYUN_ACCESS_KEY_ID = "2c63c56fc9dee8f89ea98f5fa23f57c5";
+    @Value("${asr.xfyun.access-key-id:2c63c56fc9dee8f89ea98f5fa23f57c5}")
+    private String accessKeyId;
 
+    @Value("${asr.xfyun.access-key-secret:ZjA2MDNkOWU1ZTEwNzgxOGE5NDZkNTMz}")
+    private String accessKeySecret;
 
     public String transferAudio(MultipartFile audioFile) {
         // 检查文件是否为空
@@ -34,9 +38,9 @@ public class AsrService {
 
             // 调用讯飞API进行转写
             XfyunAsrClient asrClient = new XfyunAsrClient(
-                    XFYUN_APPID,
-                    XFYUN_ACCESS_KEY_ID,
-                    XFYUN_ACCESS_KEY_SECRET,
+                    appId,
+                    accessKeyId,
+                    accessKeySecret,
                     tempFile.getAbsolutePath()
             );
 

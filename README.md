@@ -54,27 +54,61 @@ MarsAI/
 
 ### 后端配置 (marsAI/src/main/resources/application.yml)
 
-```yaml
-# 大模型 API 配置
-ai:
-  api-key: YOUR_AI_API_KEY
-  api-url: YOUR_AI_API_URL
+项目已内置默认配置，也可通过环境变量覆盖。配置文件已包含以下密钥配置：
 
-# 百度地图 API 配置
+```yaml
+# LangChain4j 配置
+langchain4j:
+  community:
+    dashscope:
+      chat-model:
+        model-name: qwen-max
+        api-key: ${DASHSCOPE_API_KEY:sk-364aaac41e084a868ed16c41e9473e42}
+
+# AI 配置
+ai:
+  api-key: ${DASHSCOPE_API_KEY:sk-364aaac41e084a868ed16c41e9473e42}
+  api-url: ${AI_API_URL:https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions}
+
+# 高德地图配置
+amap:
+  maps-api-key: ${AMAP_MAPS_API_KEY:9561f121929a1b9d992150ad8746f16b}
+  web-api-key: ${AMAP_WEB_API_KEY:7ce7be0fbc824997793aaf5c6f6005dc}
+  security-js-code: ${AMAP_SECURITY_JS_CODE:d32844a5ef2ed1dce96e7d683a17fe49}
+
+# 百度地图配置
 baidu-map:
-  ak: YOUR_BAIDU_MAP_AK
+  ak: ${BAIDU_MAP_API_KEY:M2bHjBtPzNYIPLipc28ZRK1TZObg7k3U}
 
 # MCP 配置
 mcp:
-  server-url: YOUR_MCP_SERVER_URL
-  api-key: YOUR_MCP_API_KEY
+  gaode:
+    enabled: ${MCP_GAODE_ENABLED:true}
+  baidu:
+    enabled: ${MCP_BAIDU_ENABLED:false}
 
 # 讯飞语音识别配置
 asr:
-  app-id: YOUR_XUNFEI_APP_ID
-  api-key: YOUR_XUNFEI_API_KEY
-  api-secret: YOUR_XUNFEI_API_SECRET
+  xfyun:
+    app-id: ${XFYUN_APP_ID:4aeb1706}
+    access-key-id: ${XFYUN_ACCESS_KEY_ID:2c63c56fc9dee8f89ea98f5fa23f57c5}
+    access-key-secret: ${XFYUN_ACCESS_KEY_SECRET:ZjA2MDNkOWU1ZTEwNzgxOGE5NDZkNTMz}
 ```
+
+#### 环境变量配置（可选）
+
+如需自定义配置，可通过设置以下环境变量：
+
+- `DASHSCOPE_API_KEY`: 阿里云 DashScope API 密钥
+- `AMAP_MAPS_API_KEY`: 高德地图 MCP 密钥
+- `AMAP_WEB_API_KEY`: 高德地图 Web API 密钥
+- `AMAP_SECURITY_JS_CODE`: 高德地图安全密钥
+- `BAIDU_MAP_API_KEY`: 百度地图 API 密钥
+- `MCP_GAODE_ENABLED`: 是否启用高德地图 MCP（默认：true）
+- `MCP_BAIDU_ENABLED`: 是否启用百度地图 MCP（默认：false）
+- `XFYUN_APP_ID`: 讯飞语音识别 App ID
+- `XFYUN_ACCESS_KEY_ID`: 讯飞语音识别 Access Key ID
+- `XFYUN_ACCESS_KEY_SECRET`: 讯飞语音识别 Access Key Secret
 
 ### 前端配置 (marsAI-front/src/main/resources/config.properties)
 
