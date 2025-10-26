@@ -1,0 +1,168 @@
+# MarsAI - 智能线路规划系统
+
+一个基于大模型和 MCP（Model Context Protocol）联动的智能线路规划系统，支持文本和语音输入，提供精准的线路规划与网页展示功能。
+
+## 核心功能
+
+使用大模型跟 MCP 的联动，完成对文本线路规划输入跟语音线路规划输入需求的精准识别，最终打开网页展示线路。
+
+## 特色功能
+
+1. **目的地与出发地天气信息展示** - 实时显示出发地和目的地的天气情况，帮助用户规划行程
+2. **线路上导航信息展示** - 详细的路线导航信息，包括途径地点、距离等
+3. **自动选择出行方式** - 系统自动选择最优出行方式（开车、骑行、步行）
+4. **智能线路推荐** - 结合用户提示、距离、耗时、天气等信息，给出多条最优线路
+5. **多语言语音支持** - 支持中文、英文、202种方言，无需切换
+
+## 项目结构
+
+```
+MarsAI/
+├── marsAI/                      # 后端项目（Spring Boot）
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/
+│   │   │   │   └── com/qiniu/marsai/
+│   │   │   │       ├── controller/    # 控制器
+│   │   │   │       ├── service/       # 服务层
+│   │   │   │       ├── mcp/          # MCP 配置
+│   │   │   │       └── tool/         # 工具类
+│   │   │   └── resources/
+│   │   │       ├── application.yml   # 配置文件
+│   │   │       └── static/           # 静态资源
+│   │   └── test/                     # 测试代码
+│   └── pom.xml
+│
+└── marsAI-front/                 # 前端项目
+    ├── src/
+    │   ├── main/
+    │   │   ├── java/
+    │   │   │   └── com/aiassistant/
+    │   │   │       ├── App.java                     # 应用程序入口
+    │   │   │       ├── ApiClient.java               # API 客户端
+    │   │   │       ├── AssistantController.java     # 助手控制器
+    │   │   │       ├── AudioRecorder.java           # 音频录制
+    │   │   │       ├── BrowserHelper.java           # 浏览器辅助
+    │   │   │       └── MapDataExtractor.java        # 地图数据提取
+    │   │   └── resources/
+    │   │       └── config.properties                # 配置文件
+    │   └── pom.xml
+    └── run.bat                    # 启动脚本
+```
+
+## 密钥填充指引
+
+### 后端配置 (marsAI/src/main/resources/application.yml)
+
+```yaml
+# 大模型 API 配置
+ai:
+  api-key: YOUR_AI_API_KEY
+  api-url: YOUR_AI_API_URL
+
+# 百度地图 API 配置
+baidu-map:
+  ak: YOUR_BAIDU_MAP_AK
+
+# MCP 配置
+mcp:
+  server-url: YOUR_MCP_SERVER_URL
+  api-key: YOUR_MCP_API_KEY
+
+# 讯飞语音识别配置
+asr:
+  app-id: YOUR_XUNFEI_APP_ID
+  api-key: YOUR_XUNFEI_API_KEY
+  api-secret: YOUR_XUNFEI_API_SECRET
+```
+
+### 前端配置 (marsAI-front/src/main/resources/config.properties)
+
+```properties
+# API 配置
+ai.api.key=YOUR_AI_API_KEY
+ai.api.url=YOUR_AI_API_URL
+
+# 百度地图配置
+baidu.map.ak=YOUR_BAIDU_MAP_AK
+```
+
+## 项目启动方式
+
+### 环境要求
+
+- JDK 8 或更高版本
+- Maven 3.6+
+- Chrome 浏览器（用于地图展示）
+
+### 后端启动
+
+1. 进入后端项目目录：
+```bash
+cd marsAI
+```
+
+2. 安装依赖并启动：
+```bash
+mvn clean install
+mvn spring-boot:run
+```
+
+或者使用 Maven Wrapper：
+```bash
+# Windows
+mvnw.cmd spring-boot:run
+
+# Linux/Mac
+./mvnw spring-boot:run
+```
+
+后端将在 `http://localhost:8080` 启动
+
+### 前端启动
+
+1. 进入前端项目目录：
+```bash
+cd marsAI-front
+```
+
+2. 直接运行启动脚本：
+```bash
+# Windows
+run.bat
+```
+
+或者手动编译运行：
+```bash
+mvn clean package
+java -jar target/classes
+```
+
+前端将在 `http://localhost:4567` 启动
+
+## 使用说明
+
+1. **文本输入**：在前端界面输入出发地和目的地，系统将自动规划线路
+2. **语音输入**：点击语音输入按钮，支持中英文及多种方言
+3. **查看结果**：系统将自动打开网页，展示详细的线路规划和相关信息
+
+## 技术栈
+
+- **后端**：Spring Boot, Maven
+- **前端**：Java, JavaFX（地图展示）
+- **AI 服务**：大模型 API
+- **地图服务**：百度地图 API
+- **语音识别**：讯飞 ASR
+- **协议**：MCP (Model Context Protocol)
+
+## 演示视频链接
+
+[待补充演示视频链接]
+
+## 许可证
+
+[待补充许可证信息]
+
+## 贡献
+
+欢迎提交 Issue 和 Pull Request！
