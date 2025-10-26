@@ -1,0 +1,11 @@
+target/
+.idea/
+*.iml
+*.class
+*.log
+*.tmp
+*.wav
+.DS_Store
+*.jar
+
+

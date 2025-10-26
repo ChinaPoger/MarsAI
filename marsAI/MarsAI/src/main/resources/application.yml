@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: MarsAI
+server:
+  port: 8081
+  servlet:
+    context-path: /api
+langchain4j:
+  community:
+    dashscope:
+      chat-model:
+        model-name: qwen-max
+        api-key: sk-364aaac41e084a868ed16c41e9473e42
+      streaming-chat-model:
+        model-name: qwen-max
+        api-key: <Your API Key>
+      embedding-model:
+        model-name: text-embedding-v4
+        api-key: <Your API Key>
+bigmodel:
+  api-key: <Your API Key>
+

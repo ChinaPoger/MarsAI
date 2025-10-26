@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>路线规划地图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .map-container {
+            flex: 1;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .info-panel {
+            width: 400px;
+            background: white;
+            box-shadow: -2px 0 15px rgba(0, 0, 0, 0.15);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            animation: slideInFromRight 0.5s ease-out;
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* 滚动条美化 */
+        .info-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .info-panel::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .info-panel::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 3px;
+        }
+
+        .info-panel::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #653487 100%);
+        }
+
+        .panel-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .panel-header > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-3px);
+        }
+
+        .panel-content {
+            flex: 1;
+            padding: 12px;
+        }
+
+        .info-section {
+            margin-bottom: 8px;
+            padding: 8px 10px;
+            background: linear-gradient(to right, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .info-section:hover {
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+            transform: translateX(2px);
+        }
+
+        .info-section h3 {
+            color: #667eea;
+            margin-bottom: 4px;
+            font-size: 13px;
+            font-weight: bold;
+            display: inline-block;
+            position: relative;
+        }
+
+        .info-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 2px;
+            background: #667eea;
+            animation: underline 0.5s ease-out 0.3s forwards;
+        }
+
+        @keyframes underline {
+            to {
+                width: 100%;
+            }
+        }
+
+        .route-info {
+            display: flex;
+            justify-content: space-between;
+            margin: 4px 0;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .route-info .label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .weather-info {
+            display: flex;
+            justify-content: space-between;
+            margin: 3px 0;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .weather-info .label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .steps-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .steps-list li {
+            padding: 10px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .steps-list li::before {
+            content: "📍";
+            margin-right: 8px;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+
+        /* 滚动条样式 */
+        .info-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .info-panel::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .info-panel::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .info-panel::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* 路线切换按钮样式 */
+        .route-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .route-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+        }
+        
+        .route-btn.active {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="map-container">
+        <div id="map"></div>
+    </div>
+    <div class="info-panel">
+        <div class="panel-header">
+            <span>🗺️ 路线详情</span>
+
+        </div>
+        <div class="panel-content">
+            <!-- 高德官方的panel会自动在此处渲染导航详情，包括驾车、步行、骑行 -->
+            <!-- 点击panel中的步骤会自动标红对应路段 -->
+            <div id="routeInfo"></div>
+        </div>
+    </div>
+
+    <!-- 高德地图安全密钥配置 -->
+    <script type="text/javascript">
+      window._AMapSecurityConfig = {
+        securityJsCode: "d32844a5ef2ed1dce96e7d683a17fe49",
+      };
+    </script>
+    
+    <!-- 高德地图JavaScript API -->
+    <script
+      type="text/javascript"
+      src="https://webapi.amap.com/maps?v=2.0&key=7ce7be0fbc824997793aaf5c6f6005dc&plugin=AMap.Driving,AMap.Walking,AMap.Riding,AMap.Geocoder,AMap.Weather"
+    ></script>
+    <script type="text/javascript">
+        
+        // 从URL参数获取数据
+        const urlParams = new URLSearchParams(window.location.search);
+        const startLng = parseFloat(urlParams.get('startLng'));
+        const startLat = parseFloat(urlParams.get('startLat'));
+        const endLng = parseFloat(urlParams.get('endLng'));
+        const endLat = parseFloat(urlParams.get('endLat'));
+        
+        // URL中可能是中文，需要映射
+        let rawMode = urlParams.get('mode') || 'driving';
+        const modeMap = {
+            '驾车': 'driving',
+            '开车': 'driving',
+            '自驾': 'driving',
+            '步行': 'walking',
+            '走路': 'walking',
+            '骑行': 'riding',
+            '骑车': 'riding',
+            '自行车': 'riding'
+        };
+        const mode = modeMap[rawMode] || rawMode || 'driving';
+        
+        // 获取policy参数（用于驾车路线规划策略）
+        const policy = urlParams.get('policy');
+        
+        // 出行方式显示文本
+        const modeTextMap = {
+            'driving': '驾车',
+            'walking': '步行',
+            'riding': '骑行'
+        };
+        const modeText = modeTextMap[mode] || '驾车';
+        
+        let map;
+        let routePlanner; // 通用的路线规划器
+        
+        // 初始化地图
+        function initMap() {
+            console.log('当前出行方式：', mode);
+            map = new AMap.Map('map', {
+                zoom: 10,
+                resizeEnable: true
+            });
+            
+            // 根据mode选择不同的路线规划插件
+            let pluginName = '';
+            let constructorName = '';
+            
+            if (mode === 'walking') {
+                pluginName = 'AMap.Walking';
+                constructorName = 'Walking';
+            } else if (mode === 'riding') {
+                pluginName = 'AMap.Riding';
+                constructorName = 'Riding';
+            } else {
+                pluginName = 'AMap.Driving';
+                constructorName = 'Driving';
+            }
+            
+            console.log('使用插件：', pluginName);
+            
+            // 加载对应的路线规划插件
+            AMap.plugin([pluginName], function() {
+                console.log('插件加载完成，创建实例');
+                
+                // 所有出行方式都支持panel参数
+                const config = {
+                    map: map,
+                    panel: 'routeInfo',  // 使用官方的panel
+                    hideMarkers: false
+                };
+                
+                // 驾车模式添加policy策略配置
+                if (mode === 'driving' && policy) {
+                    config.policy = parseInt(policy);
+                    console.log('设置驾车路线策略：', config.policy);
+                }
+                
+                // 创建路线规划实例
+                routePlanner = new AMap[constructorName](config);
+                
+                console.log('开始规划路线，mode=', mode);
+                
+                // 规划路线
+                routePlanner.search(new AMap.LngLat(startLng, startLat), new AMap.LngLat(endLng, endLat), (status, result) => {
+                    console.log('路线规划状态：', status, result);
+                    if (status === 'complete') {
+                        // 获取天气信息
+                        fetchWeather(startLng, startLat, '出发地');
+                        fetchWeather(endLng, endLat, '目的地');
+                        // 高德官方的panel会自动渲染导航步骤，包括驾车、步行、骑行
+                    } else {
+                        console.error('路线规划失败：', status, result);
+                        
+                        // 友好的错误提示
+                        let errorMsg = '';
+                        if (status === 'OVER_DIRECTION_RANGE') {
+                            if (mode === 'walking') {
+                                errorMsg = '❌ 步行路线不支持跨城市规划<br>距离太远，建议使用驾车或高铁';
+                            } else if (mode === 'riding') {
+                                errorMsg = '❌ 骑行路线不支持跨城市规划<br>距离太远，建议使用驾车';
+                            } else {
+                                errorMsg = '❌ 距离超出范围，请缩短距离后重试';
+                            }
+                        } else {
+                            errorMsg = '❌ 路线规划失败：' + status;
+                        }
+                        
+                        document.getElementById('routeInfo').innerHTML = 
+                            '<div style="padding: 20px; text-align: center; color: #666;">' + errorMsg + '</div>';
+                    }
+                });
+            });
+        }
+
+
+        
+        // 获取天气信息
+        function fetchWeather(lng, lat, location) {
+            // 先加载逆地理编码插件
+            AMap.plugin('AMap.Geocoder', function() {
+                // 使用高德地图的逆地理编码获取城市
+                const geocoder = new AMap.Geocoder();
+                
+                geocoder.getAddress([lng, lat], function(status, result) {
+                    if (status === 'complete' && result.info === 'OK') {
+                        const cityName = result.regeocode.addressComponent.city || 
+                                       result.regeocode.addressComponent.province || 
+                                       '未知';
+                        const district = result.regeocode.addressComponent.district || cityName;
+                        
+                        // 加载天气插件并查询天气
+                        AMap.plugin('AMap.Weather', function() {
+                            const weather = new AMap.Weather();
+                            
+                            // 查询实时天气
+                            weather.getLive(district, function(err, data) {
+                                if (!err && data) {
+                                    displayWeather(location, {
+                                        city: cityName,
+                                        temperature: data.temperature + '°',
+                                        weather: data.weather,
+                                        wind: data.windDirection + data.windPower + '级'
+                                    });
+                                } else {
+                                    // 如果实时天气失败，尝试查询预报天气
+                                    weather.getForecast(district, function(err, forecastData) {
+                                        if (!err && forecastData && forecastData.forecasts && forecastData.forecasts.length > 0) {
+                                            const today = forecastData.forecasts[0];
+                                            displayWeather(location, {
+                                                city: cityName,
+                                                temperature: today.daytemp + '°',
+                                                weather: today.dayweather,
+                                                wind: today.daywind
+                                            });
+                                        } else {
+                                            displayWeather(location, {
+                                                city: cityName,
+                                                temperature: '--',
+                                                weather: '暂无',
+                                                wind: ''
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                    } else {
+                        displayWeather(location, {
+                            city: '未知',
+                            temperature: '--',
+                            weather: '暂无',
+                            wind: ''
+                        });
+                    }
+                });
+            });
+        }
+        
+        // 显示天气信息 - 紧凑版本
+        function displayWeather(location, weather) {
+            const routeInfo = document.getElementById('routeInfo');
+            
+            // 检查是否已存在天气容器
+            let weatherContainer = document.getElementById(`weather-${location}`);
+            if (!weatherContainer) {
+                weatherContainer = document.createElement('div');
+                weatherContainer.className = 'info-section';
+                weatherContainer.id = `weather-${location}`;
+                // 插入到routeInfo的最前面
+                if (routeInfo.firstChild) {
+                    routeInfo.insertBefore(weatherContainer, routeInfo.firstChild);
+                } else {
+                    routeInfo.appendChild(weatherContainer);
+                }
+            }
+            
+            // 简洁的天气显示：城市 | 温度 | 天气 | 风力
+            weatherContainer.innerHTML = `
+                <h3>🌤️ ${location}</h3>
+                <div style="display: flex; gap: 12px; font-size: 13px; color: #666;">
+                    <span><strong>${weather.city}</strong></span>
+                    <span style="color: #333;"><strong>${weather.temperature}</strong></span>
+                    <span>${weather.weather}</span>
+                    ${weather.wind ? `<span>${weather.wind}</span>` : ''}
+                </div>
+            `;
+        }
+        
+        // 页面加载完成后初始化地图
+        window.onload = function() {
+            initMap();
+        };
+    </script>
+</body>
+</html>
+
